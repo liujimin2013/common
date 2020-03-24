@@ -1,5 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.liujimin2013'
 
 sourceCompatibility = 1.8
 
@@ -8,6 +12,16 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'Gradle Quickstart',
                    'Implementation-Version': version
+    }
+}
+
+buildscript {
+	repositories {
+		jcenter()  
+		mavenLocal()
+	}
+	dependencies {
+		classpath("com.github.dcendents.android-maven")
     }
 }
 
@@ -23,10 +37,15 @@ test {
     systemProperties 'property': 'value'
 }
 
-uploadArchives {
-    repositories {
-       flatDir {
-           dirs 'repos'
-       }
-    }
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
+
+task sourceJar (type:Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourceJar
 }
